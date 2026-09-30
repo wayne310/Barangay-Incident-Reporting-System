@@ -9,11 +9,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-const DB_NAME = 'barangay_data';
-const DB_USER = 'root';
-const DB_PASS = 'root';
-const DB_PORTS = [8889, 3306];
-const DB_HOSTS = ['127.0.0.1', 'localhost'];
+$envFile = dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env';
+if (is_file($envFile)) {
+    $envValues = parse_ini_file($envFile, false, INI_SCANNER_RAW);
+    if (is_array($envValues)) {
+        foreach ($envValues as $name => $value) {
+            if (getenv($name) === false) {
+                putenv($name . '=' . $value);
+            }
+        }
+    }
+}
+
+define('DB_NAME', getenv('DB_NAME') ?: 'barangay_data');
+define('DB_USER', getenv('DB_USER') ?: 'root');
+$dbPassword = getenv('DB_PASS');
+define('DB_PASS', $dbPassword === false ? 'root' : $dbPassword);
+define('DB_PORTS', array_map('intval', explode(',', getenv('DB_PORTS') ?: '8889,3306')));
+define('DB_HOSTS', array_map('trim', explode(',', getenv('DB_HOSTS') ?: '127.0.0.1,localhost')));
 
 function jsonResponse($statusCode, $payload) {
     http_response_code($statusCode);

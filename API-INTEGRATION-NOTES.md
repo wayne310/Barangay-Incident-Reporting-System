@@ -33,16 +33,17 @@ Do not trust role information sent by the browser. The PHP backend must authenti
 
 ## Turnstile local configuration
 
-The registration, login, and incident-creation endpoints require Cloudflare Siteverify. Configure these values in the MAMP/Apache server environment, then restart MAMP:
+The registration, login, and incident-creation endpoints require Cloudflare Siteverify. Set these values in the project-root `.env` file, or configure them in the MAMP/Apache server environment:
 
+- `TURNSTILE_SITE_KEY` - the public widget key, returned to the browser by the metadata endpoint.
 - `TURNSTILE_SECRET` - the widget secret key; keep it out of frontend code and version control.
 - `TURNSTILE_HOSTNAMES` - `localhost,127.0.0.1` for local testing.
 
-The public site key is configured in `assets/app.js`. For production, configure the production hostname separately; do not include local hostnames in the production backend's allowlist. Incident photos are stored in `api/uploads/incidents` and are served through the authenticated `api/photo.php` endpoint.
+For production, configure the production hostname separately; do not include local hostnames in the production backend's allowlist. Incident photos are stored in `api/uploads/incidents` and are served through the authenticated `api/photo.php` endpoint.
 
 ## OpenAI local configuration
 
-Incident priority is classified in PHP through the OpenAI Responses API. Configure these values in the same MAMP/Apache server environment, then restart MAMP:
+Incident priority is classified in PHP through the OpenAI Responses API. Set these values in the project-root `.env` file or the MAMP/Apache server environment:
 
 - `OPENAI_API_KEY` - the OpenAI API key; keep it server-side and out of version control.
 - `OPENAI_MODEL` - optional model override; defaults to `gpt-4o-mini`.

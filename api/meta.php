@@ -9,4 +9,5 @@ $statusList = $pdo->query('SELECT * FROM status ORDER BY status_id ASC')->fetchA
 jsonResponse(200, [
     'categories' => $categories,
     'status' => $statusList,
+    'turnstileSiteKey' => getenv('TURNSTILE_SITE_KEY') ?: '',
 ]);

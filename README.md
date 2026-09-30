@@ -60,4 +60,4 @@ Admin:
 
 Incident reports are submitted to the PHP/MySQL API. PHP sends only the incident category and description to OpenAI for a suggested priority; report photos, location, and reporter details are not sent. The AI result remains a recommendation, and an authorized barangay official must verify the official priority.
 
-Set `OPENAI_API_KEY`, `TURNSTILE_SECRET`, and `TURNSTILE_HOSTNAMES` in the MAMP/Apache server environment. `OPENAI_MODEL` is optional and defaults to `gpt-4o-mini`. Never put secret keys in frontend code or commit them to the project.
+Copy `.env.example` to `.env` and fill in your local database and service settings. PHP loads `.env` on the server; values already configured in the MAMP/Apache environment take precedence. Never put secret keys in frontend code or commit `.env` to the project.

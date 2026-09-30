@@ -15,7 +15,7 @@ const API_BASE = window.location.port === "5500"
   ? "http://localhost/SIA_PROJECT_BRGY/api"
   : "api";
 const priorities = ["Low", "Medium", "High", "Critical"];
-const TURNSTILE_SITE_KEY = "0x4AAAAAAFFZVTZAudIVH7jB";
+let TURNSTILE_SITE_KEY = "";
 const turnstileWidgets = {};
 
 function displayName(user = {}) {
@@ -123,6 +123,7 @@ async function loadMeta() {
     const data = await fetchJson("meta.php");
     if (Array.isArray(data.categories)) state.categories = data.categories;
     if (Array.isArray(data.status)) state.status = data.status;
+    TURNSTILE_SITE_KEY = data.turnstileSiteKey || "";
     save();
   } catch (error) {
     seedData();
@@ -362,12 +363,12 @@ function isSuperAdmin() {
 }
 
 async function render() {
+  await loadMeta();
   if (!state.user) {
     renderLogin();
     return;
   }
 
-  await loadMeta();
   if (!isSuperAdmin()) await loadIncidents();
   renderShell();
   renderPage();
@@ -444,13 +445,7 @@ function renderLogin() {
             <button class="btn btn-primary" style="width:100%">Login</button>
           </form>
           <button id="signupButton" class="btn btn-secondary" style="width:100%;margin-top:10px">Sign Up</button>
-          <div class="alert alert-info" style="margin-top:15px;margin-bottom:0">
-            Demo accounts: <strong>test@example.com</strong> / <strong>123456</strong><br>
-            Admin: <strong>admin@barangay.gov</strong> / <strong>admin123</strong>
-          </div>
-          <p class="footer-note">AI priority is only a recommendation; an authorized barangay official makes the final decision.</p>
-        </div>
-      </div>
+
     </div>`;
   renderTurnstileWidget("login", "login");
   document.getElementById("loginForm").addEventListener("submit", login);
